@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>文本传输</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><script src="jQuery/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <style>
+        button {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body style="max-width: 800px; margin:auto; padding: 10px">
+    <div class="row" style="margin-left: 20px; margin-top: 50px">
+        <!-- 标准的按钮 -->
+        <button id="copy" type="button" class="btn btn-secondary">复制</button>
+        <button id="post" type="button" class="btn btn-secondary">提交</button>
+        <button id="clear" type="button" class="btn btn-secondary">清空</button>
+    </div>
+    <textarea id="text" class="form-control" style="width: 100%; margin-top: 20px; font-size: 20px" rows="15"></textarea>
+
+<script>
+    $(function () {
+        $.ajax({
+            type: 'POST',
+            url: "/get",
+            success: function (returnData) {
+                set(returnData)
+            }
+        });
+    });
+
+    $("#post").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: "/post",
+            data: "text="+get(),
+            success: function (returnData) {
+                alert("ok")
+            }
+        });
+    });
+
+    $("#clear").click(function () {
+        set("");
+    });
+
+    $("#copy").click(function () {
+        copyText(get());
+    });
+
+    function copyText(text) {
+        var textarea = document.createElement("input");//创建input对象
+        var currentFocus = document.activeElement;//当前获得焦点的元素
+        document.body.appendChild(textarea);//添加元素
+        textarea.value = text;
+        textarea.focus();
+        if (textarea.setSelectionRange)
+            textarea.setSelectionRange(0, textarea.value.length);//获取光标起始位置到结束位置
+        else
+            textarea.select();
+        try {
+            var flag = document.execCommand("copy");//执行复制
+        } catch (eo) {
+            var flag = false;
+        }
+        document.body.removeChild(textarea);//删除元素
+        currentFocus.focus();
+        return flag;
+    }
+    function get() {
+        return $("#text").val();
+    }
+    function set(text) {
+        $("#text").val(text);
+    }
+
+</script>
+</body>
+</html>
