@@ -16,8 +16,10 @@
         <!-- 标准的按钮 -->
         <button id="copy" type="button" class="btn btn-secondary">复制</button>
         <button id="post" type="button" class="btn btn-secondary">提交</button>
-        <button id="escape" type="button" class="btn btn-secondary">转义<></button>
-        <button id="parsing" type="button" class="btn btn-secondary">解析<></button>
+        <button id="escape_lt_gt" type="button" class="btn btn-secondary">转义<></button>
+        <button id="parsing_lt_gt" type="button" class="btn btn-secondary">解析<></button>
+        <button id="escape_and" type="button" class="btn btn-secondary">转义&</button>
+        <button id="parsing_and" type="button" class="btn btn-secondary">解析&</button>
         <button id="clear" type="button" class="btn btn-secondary">清空</button>
     </div>
     <textarea id="text" class="form-control" style="width: 100%; margin-top: 20px; font-size: 20px" rows="15"></textarea>
@@ -33,14 +35,22 @@
         });
     });
 
-    $("#escape").click(function () {
+    $("#escape_lt_gt").click(function () {
         set(get().replaceAll("<", "&lt;"));
         set(get().replaceAll(">", "&gt;"))
     });
 
-    $("#parsing").click(function () {
+    $("#parsing_lt_gt").click(function () {
         set(get().replaceAll("&lt;", "<"));
         set(get().replaceAll("&gt;", ">"))
+    });
+
+    $("#escape_and").click(function () {
+        set(get().replaceAll("&", "&amp;"));
+    });
+
+    $("#parsing_and").click(function () {
+        set(get().replaceAll("&amp;", "&"));
     });
 
     $("#post").click(function () {
