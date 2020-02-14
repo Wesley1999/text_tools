@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>文本传输</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><script src="jQuery/jquery-3.4.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <style>
         button {
             margin-right: 20px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -23,114 +24,16 @@
         <button id="compress" type="button" class="btn btn-secondary">加密</button>
         <button id="decompress" type="button" class="btn btn-secondary">解密</button>
         <button id="clear" type="button" class="btn btn-secondary">清空</button>
+        <br>
+        <button id="random_md5" type="button" class="btn btn-secondary">随机MD5</button>
+        <button id="time_stamp" type="button" class="btn btn-secondary">当前时间戳</button>
+        <button id="time_stamp_to_time" type="button" class="btn btn-secondary">时间戳转时间</button>
+        <button id="time_to_time_stamp" type="button" class="btn btn-secondary">时间转时间戳</button>
+
     </div>
     <textarea id="text" class="form-control" style="width: 100%; margin-top: 20px; font-size: 20px" rows="15"></textarea>
-
-<script>
-    $(function () {
-        $.ajax({
-            type: 'POST',
-            url: "/get",
-            success: function (returnData) {
-                set(returnData)
-            }
-        });
-    });
-
-    $("#copy").click(function () {
-        copyText(get());
-    });
-
-    $("#post").click(function () {
-        $.ajax({
-            type: 'POST',
-            url: "/post",
-            data: "text="+get(),
-            success: function (returnData) {
-                alert("ok")
-            }
-        });
-    });
-
-    $("#escape_lt_gt").click(function () {
-        set(get().replaceAll("<", "&lt;"));
-        set(get().replaceAll(">", "&gt;"))
-    });
-
-    $("#parsing_lt_gt").click(function () {
-        set(get().replaceAll("&lt;", "<"));
-        set(get().replaceAll("&gt;", ">"))
-    });
-
-    $("#escape_and").click(function () {
-        set(get().replaceAll("&", "&amp;"));
-    });
-
-    $("#parsing_and").click(function () {
-        set(get().replaceAll("&amp;", "&"));
-    });
-
-    $("#compress").click(function () {
-        set(compressData(get()))
-    });
-
-    $("#decompress").click(function () {
-        set(decompressData(get()))
-    });
-
-    $("#clear").click(function () {
-        set("");
-    });
-
-    function copyText(text) {
-        var textarea = document.createElement("input");//创建input对象
-        var currentFocus = document.activeElement;//当前获得焦点的元素
-        document.body.appendChild(textarea);//添加元素
-        textarea.value = text;
-        textarea.focus();
-        if (textarea.setSelectionRange)
-            textarea.setSelectionRange(0, textarea.value.length);//获取光标起始位置到结束位置
-        else
-            textarea.select();
-        try {
-            var flag = document.execCommand("copy");//执行复制
-        } catch (eo) {
-            var flag = false;
-        }
-        document.body.removeChild(textarea);//删除元素
-        currentFocus.focus();
-        return flag;
-    }
-
-    function get() {
-        return $("#text").val();
-    }
-
-    function set(text) {
-        $("#text").val(text);
-    }
-
-    // 压缩
-    function compressData(data){
-        var cData;
-        cData= encodeURIComponent(data);
-        cData= unescape(cData);
-        cData= window.btoa(cData);
-        return cData;
-    }
-    // 解压
-    function decompressData(data){
-        var cData;
-        cData= window.atob(data);
-        cData= escape(cData);
-        cData= decodeURIComponent(cData);
-        return cData;
-    }
-
-    String.prototype.replaceAll = function(s1,s2){
-        return this.replace(new RegExp(s1,"gm"),s2);
-    }
-
-</script>
 </body>
+<script src="jQuery/jquery-3.4.1.min.js"></script>
+<script src="jQuery/jQuery.md5.js"></script>
+<script src="index.js"></script>
 </html>
