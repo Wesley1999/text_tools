@@ -20,6 +20,8 @@
         <button id="parsing_lt_gt" type="button" class="btn btn-secondary">解析<></button>
         <button id="escape_and" type="button" class="btn btn-secondary">转义&</button>
         <button id="parsing_and" type="button" class="btn btn-secondary">解析&</button>
+        <button id="compress" type="button" class="btn btn-secondary">加密</button>
+        <button id="decompress" type="button" class="btn btn-secondary">解密</button>
         <button id="clear" type="button" class="btn btn-secondary">清空</button>
     </div>
     <textarea id="text" class="form-control" style="width: 100%; margin-top: 20px; font-size: 20px" rows="15"></textarea>
@@ -31,6 +33,21 @@
             url: "/get",
             success: function (returnData) {
                 set(returnData)
+            }
+        });
+    });
+
+    $("#copy").click(function () {
+        copyText(get());
+    });
+
+    $("#post").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: "/post",
+            data: "text="+get(),
+            success: function (returnData) {
+                alert("ok")
             }
         });
     });
@@ -53,23 +70,16 @@
         set(get().replaceAll("&amp;", "&"));
     });
 
-    $("#post").click(function () {
-        $.ajax({
-            type: 'POST',
-            url: "/post",
-            data: "text="+get(),
-            success: function (returnData) {
-                alert("ok")
-            }
-        });
+    $("#compress").click(function () {
+        set(compressData(get()))
+    });
+
+    $("#decompress").click(function () {
+        set(decompressData(get()))
     });
 
     $("#clear").click(function () {
         set("");
-    });
-
-    $("#copy").click(function () {
-        copyText(get());
     });
 
     function copyText(text) {
@@ -98,6 +108,23 @@
 
     function set(text) {
         $("#text").val(text);
+    }
+
+    // 压缩
+    function compressData(data){
+        var cData;
+        cData= encodeURIComponent(data);
+        cData= unescape(cData);
+        cData= window.btoa(cData);
+        return cData;
+    }
+    // 解压
+    function decompressData(data){
+        var cData;
+        cData= window.atob(data);
+        cData= escape(cData);
+        cData= decodeURIComponent(cData);
+        return cData;
     }
 
     String.prototype.replaceAll = function(s1,s2){
