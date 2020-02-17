@@ -5,34 +5,61 @@
     <title>文本传输</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="js/colorpicker.js"></script>
     <style>
         button {
             margin-right: 20px;
             margin-bottom: 10px;
         }
+        .picker {
+            width:20px;
+            height:20px;
+            background:#000;
+            cursor:pointer;
+        }
     </style>
 </head>
 <body style="max-width: 800px; margin:auto; padding: 10px">
     <div class="row" style="margin-left: 20px; margin-top: 50px">
-        <!-- 标准的按钮 -->
         <button id="copy" type="button" class="btn btn-secondary">复制</button>
         <button id="post" type="button" class="btn btn-secondary">提交</button>
+        <button id="clear" type="button" class="btn btn-secondary">清空</button>
+    </div>
+    <div class="row" style="margin-left: 20px; margin-top: 10px">
+
+        <button id="random_md5" type="button" class="btn btn-secondary">随机MD5</button>
+        <button id="compress" type="button" class="btn btn-secondary">加密</button>
+        <button id="decompress" type="button" class="btn btn-secondary">解密</button>
+    </div>
+    <div class="row" style="margin-left: 20px; margin-top: 10px">
         <button id="escape_lt_gt" type="button" class="btn btn-secondary">转义<></button>
         <button id="parsing_lt_gt" type="button" class="btn btn-secondary">解析<></button>
         <button id="escape_and" type="button" class="btn btn-secondary">转义&</button>
         <button id="parsing_and" type="button" class="btn btn-secondary">解析&</button>
-        <button id="compress" type="button" class="btn btn-secondary">加密</button>
-        <button id="decompress" type="button" class="btn btn-secondary">解密</button>
-        <button id="clear" type="button" class="btn btn-secondary">清空</button>
-        <br>
-        <button id="random_md5" type="button" class="btn btn-secondary">随机MD5</button>
+    </div>
+    <div class="row" style="margin-left: 20px; margin-top: 10px">
         <button id="time_stamp" type="button" class="btn btn-secondary">当前时间戳</button>
         <button id="time_stamp_to_time" type="button" class="btn btn-secondary">时间戳转时间</button>
         <button id="time_to_time_stamp" type="button" class="btn btn-secondary">时间转时间戳</button>
-
     </div>
-    <textarea id="text" class="form-control" style="width: 100%; margin-top: 20px; font-size: 20px" rows="15"></textarea>
+    <div class="row" style="margin-left: 20px; margin-top: 10px">
+        <button id="copy_hex" type="button" class="btn btn-secondary">复制hex</button>
+        <button id="copy_rgb" type="button" class="btn btn-secondary">复制rgb</button>
+    </div>
+    <div class="picker" id="picker" style="float: right"></div>
+    <textarea id="text" class="form-control" style="width: 100%; margin-top: 0; font-size: 20px;" rows="15"></textarea>
+
 </body>
+<script>
+    Colorpicker.create({
+        bindClass:'picker',
+        change: function(elem,hex){
+            // console.log(elem,hex)
+            elem.style.backgroundColor = hex;
+            $("#text").css("color", hex)
+        }
+    })
+</script>
 <script src="jQuery/jquery-3.4.1.min.js"></script>
 <script src="jQuery/jQuery.md5.js"></script>
 <script src="js/index.js"></script>

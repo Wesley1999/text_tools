@@ -12,6 +12,18 @@ $("#copy").click(function () {
     copyText(get());
 });
 
+$("#copy_hex").click(function () {
+    let rgb = $("#picker").css("background-color");
+    copyText(rgb.colorHex());
+});
+
+$("#copy_rgb").click(function () {
+    let rgb = $("#picker").css("background-color");
+    rgb = rgb.substring(4);
+    rgb = rgb.substring(0, rgb.length-1);
+    copyText(rgb);
+});
+
 $("#post").click(function () {
     $.ajax({
         type: 'POST',
@@ -106,17 +118,17 @@ function set(text) {
     $("#text").val(text);
 }
 
-// 压缩
+// 加密
 function compressData(data){
-    var cData;
+    let cData;
     cData= encodeURIComponent(data);
     cData= unescape(cData);
     cData= window.btoa(cData);
     return cData;
 }
-// 解压
+// 解密
 function decompressData(data){
-    var cData;
+    let cData;
     cData= window.atob(data);
     cData= escape(cData);
     cData= decodeURIComponent(cData);
@@ -141,4 +153,39 @@ Date.prototype.format = function (fmt) {
     for (var k in o)
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
-}
+};
+
+// 颜色转换
+String.prototype.colorHex = function(){
+    var that = this;
+    //十六进制颜色值的正则表达式
+    var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+    // 如果是rgb颜色表示
+    if (/^(rgb|RGB)/.test(that)) {
+        var aColor = that.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
+        var strHex = "#";
+        for (var i=0; i<aColor.length; i++) {
+            var hex = Number(aColor[i]).toString(16);
+            if (hex.length < 2) {
+                hex = '0' + hex;
+            }
+            strHex += hex;
+        }
+        if (strHex.length !== 7) {
+            strHex = that;
+        }
+        return strHex;
+    } else if (reg.test(that)) {
+        var aNum = that.replace(/#/,"").split("");
+        if (aNum.length === 6) {
+            return that;
+        } else if(aNum.length === 3) {
+            var numHex = "#";
+            for (var i=0; i<aNum.length; i+=1) {
+                numHex += (aNum[i] + aNum[i]);
+            }
+            return numHex;
+        }
+    }
+    return that;
+};
