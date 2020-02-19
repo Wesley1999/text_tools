@@ -102,6 +102,7 @@ function copyText(text) {
         textarea.select();
     try {
         var flag = document.execCommand("copy");//执行复制
+        alert(text)
     } catch (eo) {
         var flag = false;
     }
@@ -152,8 +153,10 @@ $("#search_emojis").click(function () {
 });
 
 $("#copy_emojis").click(function () {
-    copyText(search_emojis_result)
-    alert(search_emojis_result)
+    if (search_emojis_result == "") {
+        return;
+    }
+    copyText(search_emojis_result);
 });
 
 String.prototype.replaceAll = function(s1,s2){
