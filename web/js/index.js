@@ -88,7 +88,8 @@ function aes_decrypt() {
     set(cData)
 }
 
-function clear() {
+// 不能以clear作为函数名
+function clear_text() {
     set("");
 }
 
