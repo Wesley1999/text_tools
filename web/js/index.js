@@ -135,6 +135,21 @@ function decompressData(data){
     return cData;
 }
 
+$("#get_emojis").click(function () {
+    set(get().trim());
+    let originalText = get();
+    if (originalText == "" || originalText == "，" || originalText == " ") {
+        return;
+    }
+    set(get()+"\n\n");
+    for (let i = 1; i < emojis.length; i+=2) {
+        if (emojis[i].indexOf(originalText) != -1) {
+            set(get()+emojis[i-1])
+        }
+    }
+    set(get().trim())
+});
+
 String.prototype.replaceAll = function(s1,s2){
     return this.replace(new RegExp(s1,"gm"),s2);
 };
