@@ -89,7 +89,7 @@ function aes_decrypt() {
 }
 
 function clear() {
-    set();
+    set("");
 }
 
 function random_md5() {
