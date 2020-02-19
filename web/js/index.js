@@ -8,23 +8,23 @@ $(function () {
     });
 });
 
-$("#copy").click(function () {
+function copy() {
     copyText(get());
-});
+}
 
-$("#copy_hex").click(function () {
+function copy_hex() {
     let rgb = $("#picker").css("background-color");
     copyText(rgb.colorHex());
-});
+}
 
-$("#copy_rgb").click(function () {
+function copy_rgb() {
     let rgb = $("#picker").css("background-color");
     rgb = rgb.substring(4);
     rgb = rgb.substring(0, rgb.length-1);
     copyText(rgb);
-});
+}
 
-$("#post").click(function () {
+function post() {
     $.ajax({
         type: 'POST',
         url: "/post",
@@ -33,39 +33,66 @@ $("#post").click(function () {
             alert("ok")
         }
     });
-});
+}
 
-$("#escape_lt_gt").click(function () {
+function refresh() {
+    location.reload();
+}
+
+function escape_lt_gt() {
     set(get().replaceAll("<", "&lt;"));
     set(get().replaceAll(">", "&gt;"))
-});
+}
 
-$("#parsing_lt_gt").click(function () {
+function parsing_lt_gt() {
     set(get().replaceAll("&lt;", "<"));
-    set(get().replaceAll("&gt;", ">"))
-});
+    set(get().replaceAll("&gt;", ">"));
+}
 
-$("#escape_and").click(function () {
+function escape_and() {
     set(get().replaceAll("&", "&amp;"));
-});
+}
 
-$("#parsing_and").click(function () {
+function parsing_and() {
     set(get().replaceAll("&amp;", "&"));
-});
+}
 
-$("#compress").click(function () {
-    set(compressData(get()))
-});
+// function escape_html() {
+//     var temp = document.createElement("div");
+//     (temp.textContent != null) ? (temp.textContent = get()) : (temp.innerText = get());
+//     var output = temp.innerHTML;
+//     temp = null;
+//     set(output);
+// }
+//
+// function parsing_html() {
+//     var temp = document.createElement("div");
+//     temp.innerHTML = get();
+//     var output = temp.innerText || temp.textContent;
+//     temp = null;
+//     set(output);
+// }
 
-$("#decompress").click(function () {
-    set(decompressData(get()))
-});
 
-$("#clear").click(function () {
+function aes_encrypt() {
+    let cData = encodeURIComponent(get());
+    cData = unescape(cData);
+    cData = window.btoa(cData);
+    set(cData)
+}
+
+function aes_decrypt() {
+    let cData = window.atob(get());
+    cData = escape(cData);
+    cData = decodeURIComponent(cData);
+    set(cData)
+}
+
+function clear() {
     set();
-});
+}
 
-$("#random_md5").click(function () {
+function random_md5() {
     set();
     for (let i = 0; i < 5; i++) {
         let s = $.md5(Math.random().toString());
@@ -76,19 +103,26 @@ $("#random_md5").click(function () {
         let s = $.md5(Math.random().toString());
         set(get()+"\n"+s);
     }
-});
+}
 
-$("#time_stamp").click(function () {
+function md5_encrypt() {
+    let s = $.md5(get());
+    set(s+"\n\n")
+    s = s.substring(0,8) + "-" + s.substring(8,12) + "-" + s.substring(12,16) + "-" + s.substring(16,20) + "-" + s.substring(20,32);
+    set(get()+s)
+}
+
+function current_time_stamp() {
     set(new Date().getTime());
-});
+}
 
-$("#time_stamp_to_time").click(function () {
+function time_stamp_to_time() {
     set(new Date(parseInt(get())).format("yyyy-MM-dd hh:mm:ss"))
-});
+}
 
-$("#time_to_time_stamp").click(function () {
+function time_to_time_stamp() {
     set(new Date(get()).getTime())
-});
+}
 
 function copyText(text) {
     var textarea = document.createElement("input");//创建input对象
@@ -119,24 +153,7 @@ function set(text) {
     $("#text").val(text);
 }
 
-// 加密
-function compressData(data){
-    let cData;
-    cData= encodeURIComponent(data);
-    cData= unescape(cData);
-    cData= window.btoa(cData);
-    return cData;
-}
-// 解密
-function decompressData(data){
-    let cData;
-    cData= window.atob(data);
-    cData= escape(cData);
-    cData= decodeURIComponent(cData);
-    return cData;
-}
-
-$("#search_emojis").click(function () {
+function search_emojis() {
     search_emojis_result = "";
     set(get().trim());
     let originalText = get();
@@ -150,14 +167,13 @@ $("#search_emojis").click(function () {
     }
     set(get()+"\n\n"+search_emojis_result)
     set(get().trim())
-});
+}
 
-$("#copy_emojis").click(function () {
-    if (search_emojis_result == "") {
-        return;
+function copy_emojis() {
+    if (search_emojis_result != "") {
+        copyText(search_emojis_result);
     }
-    copyText(search_emojis_result);
-});
+}
 
 String.prototype.replaceAll = function(s1,s2){
     return this.replace(new RegExp(s1,"gm"),s2);

@@ -24,35 +24,38 @@
 </head>
 <body style="max-width: 800px; margin:auto; padding: 10px">
     <div class="row" style="margin-left: 20px; margin-top: 50px">
-        <button id="copy" type="button" class="btn btn-secondary">复制</button>
-        <button id="post" type="button" class="btn btn-secondary">提交</button>
-        <button id="clear" type="button" class="btn btn-secondary">清空</button>
+        <button type="button" class="btn btn-secondary" onclick="copy()">复制</button>
+        <button type="button" class="btn btn-secondary" onclick="post()">提交</button>
+        <button type="button" class="btn btn-secondary" onclick="refresh()">刷新</button>
+        <button type="button" class="btn btn-secondary" onclick="clear()">清空</button>
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
-
-        <button id="random_md5" type="button" class="btn btn-secondary">随机MD5</button>
-        <button id="compress" type="button" class="btn btn-secondary">加密</button>
-        <button id="decompress" type="button" class="btn btn-secondary">解密</button>
+        <button type="button" class="btn btn-secondary" onclick="random_md5()">随机MD5</button>
+        <button type="button" class="btn btn-secondary" onclick="md5_encrypt()">MD5加密</button>
+        <button type="button" class="btn btn-secondary" onclick="aes_encrypt()">AES加密</button>
+        <button type="button" class="btn btn-secondary" onclick="aes_decrypt()">AES解密</button>
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button id="escape_lt_gt" type="button" class="btn btn-secondary">转义<></button>
-        <button id="parsing_lt_gt" type="button" class="btn btn-secondary">解析<></button>
-        <button id="escape_and" type="button" class="btn btn-secondary">转义&</button>
-        <button id="parsing_and" type="button" class="btn btn-secondary">解析&</button>
+        <button type="button" class="btn btn-secondary" onclick="escape_lt_gt()">转义<></button>
+        <button type="button" class="btn btn-secondary" onclick="parsing_lt_gt()">解析<></button>
+        <button type="button" class="btn btn-secondary" onclick="escape_and()">转义&</button>
+        <button type="button" class="btn btn-secondary" onclick="parsing_and()">解析&</button>
+<!--        <button type="button" class="btn btn-secondary" onclick="escape_html()">转义HTML</button>-->
+<!--        <button type="button" class="btn btn-secondary" onclick="parsing_html()">解析HTML</button>-->
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button id="time_stamp" type="button" class="btn btn-secondary">当前时间戳</button>
-        <button id="time_stamp_to_time" type="button" class="btn btn-secondary">时间戳转时间</button>
-        <button id="time_to_time_stamp" type="button" class="btn btn-secondary">时间转时间戳</button>
+        <button type="button" class="btn btn-secondary" onclick="current_time_stamp()">当前时间戳</button>
+        <button type="button" class="btn btn-secondary" onclick="time_stamp_to_time()">时间戳转时间</button>
+        <button type="button" class="btn btn-secondary" onclick="time_to_time_stamp()">时间转时间戳</button>
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
         <div class="picker" id="picker" style="float: right; margin-top: 8px; margin-right: 20px"></div>
-        <button id="copy_hex" type="button" class="btn btn-secondary">复制hex</button>
-        <button id="copy_rgb" type="button" class="btn btn-secondary">复制rgb</button>
+        <button type="button" class="btn btn-secondary" onclick="copy_hex()">复制hex</button>
+        <button type="button" class="btn btn-secondary" onclick="copy_rgb()">复制rgb</button>
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button id="search_emojis" type="button" class="btn btn-secondary">搜索emoji</button>
-        <button id="copy_emojis" type="button" class="btn btn-secondary">复制emoji</button>
+        <button type="button" class="btn btn-secondary" onclick="search_emojis()">搜索emoji</button>
+        <button type="button" class="btn btn-secondary" onclick="copy_emojis()">复制emoji</button>
     </div>
     <br>
     <textarea id="text" class="form-control" style="width: 100%; margin-top: 0; font-size: 20px;" rows="15"></textarea>
