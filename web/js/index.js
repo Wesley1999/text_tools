@@ -135,19 +135,25 @@ function decompressData(data){
     return cData;
 }
 
-$("#get_emojis").click(function () {
+$("#search_emojis").click(function () {
+    search_emojis_result = "";
     set(get().trim());
     let originalText = get();
     if (originalText == "" || originalText == "，" || originalText == " ") {
         return;
     }
-    set(get()+"\n\n");
     for (let i = 1; i < emojis.length; i+=2) {
         if (emojis[i].indexOf(originalText) != -1) {
-            set(get()+emojis[i-1])
+            search_emojis_result += emojis[i-1]
         }
     }
+    set(get()+"\n\n"+search_emojis_result)
     set(get().trim())
+});
+
+$("#copy_emojis").click(function () {
+    copyText(search_emojis_result)
+    alert(search_emojis_result)
 });
 
 String.prototype.replaceAll = function(s1,s2){
