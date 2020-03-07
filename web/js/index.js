@@ -233,10 +233,11 @@ String.prototype.colorHex = function(){
 
 function toast(msg, time=2000, parse=false) {
     if (!parse) {
-        msg = msg.replaceAll("&", "&amp;");
-        msg = msg.replaceAll(">", "&gt;");
-        msg = msg.replaceAll("<", "&lt;")
+        msg = msg.replaceAll("&amp;", "&amp;amp;");
+        msg = msg.replaceAll("&gt;", "&amp;gt;");
+        msg = msg.replaceAll("&lt;", "&amp;lt;")
     }
+    msg = msg.replaceAll("\n", "&lt;br&gt;");
     layer.msg(msg, {
         time: time
         // btn: ['明白了', '知道了', '哦']
