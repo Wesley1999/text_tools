@@ -30,7 +30,7 @@ function post() {
         url: "/post",
         data: "text="+get(),
         success: function (returnData) {
-            alert("ok")
+            toast("ok")
         }
     });
 }
@@ -137,7 +137,7 @@ function copyText(text) {
         textarea.select();
     try {
         var flag = document.execCommand("copy");//执行复制
-        alert(text)
+        toast(text)
     } catch (eo) {
         var flag = false;
     }
@@ -230,3 +230,15 @@ String.prototype.colorHex = function(){
     }
     return that;
 };
+
+function toast(msg, time=2000, parse=false) {
+    if (!parse) {
+        msg = msg.replaceAll("&", "&amp;");
+        msg = msg.replaceAll(">", "&gt;");
+        msg = msg.replaceAll("<", "&lt;")
+    }
+    layer.msg(msg, {
+        time: time
+        // btn: ['明白了', '知道了', '哦']
+    });
+}
