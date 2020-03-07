@@ -3,9 +3,26 @@ $(function () {
         type: 'POST',
         url: "/get",
         success: function (returnData) {
-            set(returnData)
+            set(returnData);
+            text_change();
         }
     });
+    laydate.render({
+        elem: '#timer', //指定元素
+        type: "datetime",
+        done: function(value){
+            set(value);
+        }
+    });
+    Colorpicker.create({
+        bindClass:'picker',
+        change: function(elem,hex){
+            // console.log(elem,hex)
+            // elem.style.backgroundColor = hex;
+            $("#text").css("color", hex);
+            $("#picker").attr("fill", hex);
+        }
+    })
 });
 
 function copy() {
@@ -13,12 +30,12 @@ function copy() {
 }
 
 function copy_hex() {
-    let rgb = $("#picker").css("background-color");
+    let rgb = $("#picker").css("fill");
     copyText(rgb.colorHex());
 }
 
 function copy_rgb() {
-    let rgb = $("#picker").css("background-color");
+    let rgb = $("#picker").css("fill");
     rgb = rgb.substring(4);
     rgb = rgb.substring(0, rgb.length-1);
     copyText(rgb);
@@ -31,6 +48,10 @@ function post() {
         data: "text="+get(),
         success: function (returnData) {
             toast("ok")
+        },
+        error: function () {
+            toast("error")
+
         }
     });
 }
@@ -40,21 +61,37 @@ function refresh() {
 }
 
 function escape_lt_gt() {
+    let originalContent = get();
     set(get().replaceAll("<", "&lt;"));
-    set(get().replaceAll(">", "&gt;"))
+    set(get().replaceAll(">", "&gt;"));
+    if (get() === originalContent) {
+        toast("不需要转义");
+    }
 }
 
 function parsing_lt_gt() {
+    let originalContent = get();
     set(get().replaceAll("&lt;", "<"));
     set(get().replaceAll("&gt;", ">"));
+    if (get() === originalContent) {
+        toast("不需要解析");
+    }
 }
 
 function escape_and() {
+    let originalContent = get();
     set(get().replaceAll("&", "&amp;"));
+    if (get() === originalContent) {
+        toast("不需要转义");
+    }
 }
 
 function parsing_and() {
+    let originalContent = get();
     set(get().replaceAll("&amp;", "&"));
+    if (get() === originalContent) {
+        toast("不需要解析");
+    }
 }
 
 // function escape_html() {
@@ -84,33 +121,54 @@ function aes_encrypt() {
 function aes_decrypt() {
     let cData = window.atob(get());
     cData = escape(cData);
-    cData = decodeURIComponent(cData);
-    set(cData)
+    try {
+        cData = decodeURIComponent(cData);
+    } catch (e) {
+        toast("无法继续解密");
+        return;
+    }
+    set(cData);
 }
 
 // 不能以clear作为函数名
 function clear_text() {
+    if (get() === "") {
+        toast("已经是空的了！")
+    }
     set("");
 }
 
 function random_md5() {
     set();
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
         let s = $.md5(Math.random().toString());
-        s = s.substring(0,8) + "-" + s.substring(8,12) + "-" + s.substring(12,16) + "-" + s.substring(16,20) + "-" + s.substring(20,32);
+        if ($("#md5_minus").text() === "-") {
+            s = s.substring(0,8) + "-" + s.substring(8,12) + "-" + s.substring(12,16) + "-" + s.substring(16,20) + "-" + s.substring(20,32);
+        }
         set(get()+s+"\n");
     }
-    for (let i = 0; i < 5; i++) {
-        let s = $.md5(Math.random().toString());
-        set(get()+"\n"+s);
-    }
+    // for (let i = 0; i < 5; i++) {
+    //     let s = $.md5(Math.random().toString());
+    //     set(get()+"\n"+s);
+    // }
 }
 
 function md5_encrypt() {
-    let s = $.md5(get());
-    set(s+"\n\n")
-    s = s.substring(0,8) + "-" + s.substring(8,12) + "-" + s.substring(12,16) + "-" + s.substring(16,20) + "-" + s.substring(20,32);
-    set(get()+s)
+    let s = $.md5(get() + $("#md5_salt").val());
+    if ($("#md5_minus").text() === "-") {
+        s = s.substring(0, 8) + "-" + s.substring(8, 12) + "-" + s.substring(12, 16) + "-" + s.substring(16, 20) + "-" + s.substring(20, 32);
+    }
+    set(s)
+}
+
+function md5_minus_click() {
+    if ($("#md5_minus").text() === "-") {
+        $("#md5_minus").text("");
+        toast("无连字符");
+    } else {
+        $("#md5_minus").text("-")
+        toast("有连字符");
+    }
 }
 
 function current_time_stamp() {
@@ -118,11 +176,21 @@ function current_time_stamp() {
 }
 
 function time_stamp_to_time() {
-    set(new Date(parseInt(get())).format("yyyy-MM-dd hh:mm:ss"))
+    let timeStamp = parseInt(get());
+    if (Number.isNaN(timeStamp) || timeStamp >= 1970 && timeStamp <= 3000) {
+        toast("时间戳有误");
+        return;
+    }
+    set(new Date(timeStamp).format("yyyy-MM-dd hh:mm:ss"));
 }
 
 function time_to_time_stamp() {
-    set(new Date(get()).getTime())
+    let timeStamp = new Date(get()).getTime();
+    if (Number.isNaN(timeStamp)) {
+        toast("时间有误");
+        return;
+    }
+    set(timeStamp)
 }
 
 function copyText(text) {
@@ -137,7 +205,7 @@ function copyText(text) {
         textarea.select();
     try {
         var flag = document.execCommand("copy");//执行复制
-        toast(text)
+        toast(text + "\n已复制到剪切板")
     } catch (eo) {
         var flag = false;
     }
@@ -166,17 +234,41 @@ function search_emojis() {
             search_emojis_result += emojis[i-1]
         }
     }
-    set(get()+"\n\n"+search_emojis_result)
+    set(get()+"\n\n"+search_emojis_result);
     set(get().trim())
+    if (search_emojis_result === "") {
+        toast("搜索结果为空");
+    }
 }
 
 function copy_emojis() {
-    if (search_emojis_result != "") {
+    if (typeof search_emojis_result === "undefined" || search_emojis_result === "") {
+        toast("请先搜索");
+    } else {
         copyText(search_emojis_result);
     }
 }
 
-String.prototype.replaceAll = function(s1,s2){
+function text_change() {
+    let words = wordsCount(get());
+    $("#timer").val(get());
+    $("#wordsCount").text("字数："+words);
+}
+
+function font_size_change() {
+    let fontSize = parseInt($("#font_size").val());
+    if (fontSize >= 12 && fontSize <= 100) {
+        $("#text").css("font-size", fontSize+"px");
+    } else if (fontSize >= 1 && fontSize <= 11) {
+        $("#text").css("font-size", "20px");
+    } else {
+        $("#text").css("font-size", "20px");
+        toast("请输入12到100之间的数");
+    }
+
+}
+
+String.prototype.replaceAll = function(s1, s2){
     return this.replace(new RegExp(s1,"gm"),s2);
 };
 
@@ -233,13 +325,33 @@ String.prototype.colorHex = function(){
 
 function toast(msg, time=2000, parse=false) {
     if (!parse) {
-        msg = msg.replaceAll("&amp;", "&amp;amp;");
-        msg = msg.replaceAll("&gt;", "&amp;gt;");
-        msg = msg.replaceAll("&lt;", "&amp;lt;")
+        msg = msg.replaceAll("&", "&amp;");
+        msg = msg.replaceAll(">", "&gt;");
+        msg = msg.replaceAll("<", "&lt;")
     }
-    msg = msg.replaceAll("\n", "&lt;br&gt;");
+    msg = msg.replaceAll("\n", "<br>");
     layer.msg(msg, {
         time: time
         // btn: ['明白了', '知道了', '哦']
     });
+}
+
+//用word方式计算正文字数
+function wordsCount(str){
+    let sLen = 0;
+    try{
+        //先将回车换行符做特殊处理
+        str = str.replace(/(\r\n+|\s+|　+)/g,"龘");
+        //处理英文字符数字，连续字母、数字、英文符号视为一个单词
+        str = str.replace(/[\x00-\xff]/g,"m");
+        //合并字符m，连续字母、数字、英文符号视为一个单词
+        str = str.replace(/m+/g,"*");
+        //去掉回车换行符
+        str = str.replace(/龘+/g,"");
+        //返回字数
+        sLen = str.length;
+    }catch(e){
+
+    }
+    return sLen;
 }
