@@ -36,8 +36,7 @@ function post() {
             toast("ok")
         },
         error: function () {
-            toast("error")
-
+            toast("error");
         }
     });
 }
