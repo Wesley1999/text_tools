@@ -1,19 +1,5 @@
 $(function () {
-    $.ajax({
-        type: 'POST',
-        url: "/get",
-        success: function (returnData) {
-            set(returnData);
-            text_change();
-        }
-    });
-    laydate.render({
-        elem: '#timer', //指定元素
-        type: "datetime",
-        done: function(value){
-            set(value);
-        }
-    });
+    load();
     Colorpicker.create({
         bindClass:'picker',
         change: function(elem,hex){
@@ -56,8 +42,34 @@ function post() {
     });
 }
 
+function load(async=true) {
+    $.ajax({
+        type: 'POST',
+        url: "/get",
+        async: async,
+        success: function (returnData) {
+            set(returnData);
+            text_change();
+        },
+        error: function () {
+            toast("加载失败")
+        }
+    });
+    laydate.render({
+        elem: '#timer', //指定元素
+        type: "datetime",
+        done: function(value){
+            set(value);
+        }
+    });
+}
+
 function refresh() {
-    location.reload();
+    let originalContent = get();
+    load(false);
+    if (get() === originalContent) {
+        toast("不需要刷新");
+    }
 }
 
 function escape_lt_gt() {
