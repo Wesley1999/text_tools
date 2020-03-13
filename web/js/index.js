@@ -31,7 +31,7 @@ function post() {
     $.ajax({
         type: 'POST',
         url: "/post",
-        data: "text="+get(),
+        data: "text="+encodeURIComponent(get()),
         success: function (returnData) {
             toast("ok")
         },
