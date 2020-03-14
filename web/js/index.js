@@ -205,23 +205,26 @@ function time_to_time_stamp() {
 }
 
 function copyText(text) {
-    var textarea = document.createElement("input");//创建input对象
-    var currentFocus = document.activeElement;//当前获得焦点的元素
-    document.body.appendChild(textarea);//添加元素
+    let flag = false;
+    let textarea = document.createElement("input");
+    textarea.style.position = 'fixed';
+    textarea.style.top = (document.documentElement.clientWidth / 2) + "px";
+    textarea.style.left = (document.documentElement.clientHeight / 2) + "px";
+    let currentFocus = document.activeElement;
+    document.body.appendChild(textarea);
     textarea.value = text;
     textarea.focus();
-    if (textarea.setSelectionRange)
-        textarea.setSelectionRange(0, textarea.value.length);//获取光标起始位置到结束位置
-    else
+    if (textarea.setSelectionRange) {
+        textarea.setSelectionRange(0, textarea.value.length);
+    } else {
         textarea.select();
-    try {
-        var flag = document.execCommand("copy");//执行复制
-        toast(text + "\n已复制到剪切板")
-    } catch (eo) {
-        var flag = false;
     }
-    document.body.removeChild(textarea);//删除元素
+    try {
+        flag = document.execCommand("copy");
+    } catch (eo) {}
+    document.body.removeChild(textarea);
     currentFocus.focus();
+    toast(text + "\n已复制到剪切板");
     return flag;
 }
 
