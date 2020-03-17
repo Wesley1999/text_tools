@@ -107,7 +107,7 @@ function parsing_and() {
 
 function show_more(target) {
     if ($("#hide").css("height") === "0px") {
-        $(target).text("展开");
+        $(target).text("收起");
         $("#hide").css("display", "block");
         $("#hide").animate({height:$("#hide").prop('scrollHeight') + "px"}, 200);
     } else {
@@ -115,7 +115,7 @@ function show_more(target) {
         setTimeout(function () {
             $("#hide").css("display", "none")
         }, 150);
-        $(target).text("收起");
+        $(target).text("展开");
     }
 }
 
