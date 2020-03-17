@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>文本传输</title>
+    <title>在线文本处理工具</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <style>
@@ -43,27 +43,36 @@
         <button type="button" class="btn btn-secondary" onclick="parsing_lt_gt()">解析<></button>
         <button type="button" class="btn btn-secondary" onclick="escape_and()">转义&</button>
         <button type="button" class="btn btn-secondary" onclick="parsing_and()">解析&</button>
+        <button type="button" class="btn btn-secondary" onclick="show_more(this)">展开</button>
 <!--        <button type="button" class="btn btn-secondary" onclick="escape_html()">转义HTML</button>-->
 <!--        <button type="button" class="btn btn-secondary" onclick="parsing_html()">解析HTML</button>-->
     </div>
-    <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button type="button" class="btn btn-secondary" onclick="current_time_stamp()">当前时间戳</button>
-        <button type="button" class="btn btn-secondary" onclick="time_stamp_to_time()">时间戳转时间</button>
-        <button type="button" class="btn btn-secondary" onclick="time_to_time_stamp()">时间转时间戳</button>
-        <input type="text" id="timer" class="form-control" style="width:38px; background: url('img/clock.png') no-repeat; background-size: 38px; padding: 0; border: 0; color: rgba(0, 0 ,0 ,0); box-shadow: none" readonly>
-    </div>
-    <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button type="button" class="btn btn-secondary" onclick="copy_hex()">复制hex</button>
-        <button type="button" class="btn btn-secondary" onclick="copy_rgb()">复制rgb</button>
-        <input type="text" class="form-control" style="width: 150px" placeholder="font-size: 20px" id="font_size" oninput="font_size_change()" onfocus="toast('请输入12到100之间的数，单位：px')">
-        <div class="picker" style="height: 38px; width: 38px; background-color:#fff; margin-left: 10px">
-            <svg t="1583586112098" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2332" width="38px" height="38px"><path id="picker" d="M502.181647 29.635765a479.292235 479.292235 0 0 0-481.28 481.28 479.292235 479.292235 0 0 0 481.28 481.28c42.827294 0 80.233412-37.526588 80.233412-80.233412 0-21.443765-5.300706-37.586824-21.263059-53.609412-10.842353-16.082824-21.443765-32.105412-21.443765-53.36847 0-42.827294 37.406118-80.233412 80.293647-80.233412h96.256c149.744941 0 267.324235-117.699765 267.324236-267.444706-0.120471-235.158588-214.076235-427.670588-481.400471-427.670588m-294.068706 481.28c-42.827294 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.406118-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647-0.120471 42.706824-37.526588 80.233412-80.233412 80.233412M368.519529 296.96c-42.827294 0-80.293647-37.345882-80.293647-80.233412 0-42.706824 37.466353-80.233412 80.293647-80.233412 42.706824 0 80.233412 37.406118 80.233412 80.233412 0 42.827294-37.406118 80.233412-80.233412 80.233412m267.324236 0c-42.767059 0-80.233412-37.345882-80.233412-80.233412 0-42.706824 37.406118-80.233412 80.233412-80.233412 42.767059 0 80.293647 37.406118 80.293647 80.233412 0 42.827294-37.466353 80.233412-80.293647 80.233412m160.406588 213.955765c-42.767059 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.345882-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647 0 42.706824-37.406118 80.233412-80.233412 80.233412" fill="#000000" p-id="2333"></path></svg>
+
+    <div id="hide">
+        <div class="row" style="margin-left: 20px; margin-top: 10px; z-index: 0">
+            <button type="button" class="btn btn-secondary" onclick="current_time_stamp()">当前时间戳</button>
+            <button type="button" class="btn btn-secondary" onclick="time_stamp_to_time()">时间戳转时间</button>
+            <button type="button" class="btn btn-secondary" onclick="time_to_time_stamp()">时间转时间戳</button>
+            <input type="text" id="timer" class="form-control" style="width:38px; background: url('img/clock.png') no-repeat; background-size: 38px; padding: 0; border: 0; color: rgba(0, 0 ,0 ,0); box-shadow: none" readonly>
         </div>
+        <div class="row" style="margin-left: 20px; margin-top: 10px">
+            <button type="button" class="btn btn-secondary" onclick="copy_hex()">复制hex</button>
+            <button type="button" class="btn btn-secondary" onclick="copy_rgb()">复制rgb</button>
+            <input type="text" class="form-control" style="width: 150px" placeholder="font-size: 20px" id="font_size" oninput="font_size_change()" onfocus="toast('请输入12到100之间的数，单位：px')">
+            <div class="picker" style="height: 38px; width: 38px; background-color:#fff; margin-left: 10px">
+                <svg t="1583586112098" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2332" width="38px" height="38px"><path id="picker" d="M502.181647 29.635765a479.292235 479.292235 0 0 0-481.28 481.28 479.292235 479.292235 0 0 0 481.28 481.28c42.827294 0 80.233412-37.526588 80.233412-80.233412 0-21.443765-5.300706-37.586824-21.263059-53.609412-10.842353-16.082824-21.443765-32.105412-21.443765-53.36847 0-42.827294 37.406118-80.233412 80.293647-80.233412h96.256c149.744941 0 267.324235-117.699765 267.324236-267.444706-0.120471-235.158588-214.076235-427.670588-481.400471-427.670588m-294.068706 481.28c-42.827294 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.406118-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647-0.120471 42.706824-37.526588 80.233412-80.233412 80.233412M368.519529 296.96c-42.827294 0-80.293647-37.345882-80.293647-80.233412 0-42.706824 37.466353-80.233412 80.293647-80.233412 42.706824 0 80.233412 37.406118 80.233412 80.233412 0 42.827294-37.406118 80.233412-80.233412 80.233412m267.324236 0c-42.767059 0-80.233412-37.345882-80.233412-80.233412 0-42.706824 37.406118-80.233412 80.233412-80.233412 42.767059 0 80.293647 37.406118 80.293647 80.233412 0 42.827294-37.466353 80.233412-80.293647 80.233412m160.406588 213.955765c-42.767059 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.345882-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647 0 42.706824-37.406118 80.233412-80.233412 80.233412" fill="#000000" p-id="2333"></path></svg>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 20px; margin-top: 10px">
+            <button type="button" class="btn btn-secondary" onclick="search_emojis()">搜索emoji</button>
+            <button type="button" class="btn btn-secondary" onclick="copy_emojis()">复制emoji</button>
+        </div>
+        <div class="row" style="margin-left: 20px; margin-top: 10px">
+        <button type="button" class="btn btn-secondary" onclick="translate1()">中英互译</button>
+        <button type="button" class="btn btn-secondary" onclick="randomSentence()">随机的一句话</button>
     </div>
-    <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button type="button" class="btn btn-secondary" onclick="search_emojis()">搜索emoji</button>
-        <button type="button" class="btn btn-secondary" onclick="copy_emojis()">复制emoji</button>
     </div>
+    
     <br>
     <div style="float: right; padding-right: 20px" id="wordsCount">字数：0</div>
     <textarea id="text" class="form-control" style="width: 100%; margin-top: 0; font-size: 20px;" rows="15" oninput="text_change()"></textarea>

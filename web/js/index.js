@@ -105,6 +105,20 @@ function parsing_and() {
     }
 }
 
+function show_more(target) {
+    if ($("#hide").css("height") === "0px") {
+        $(target).text("展开");
+        $("#hide").css("display", "block");
+        $("#hide").animate({height:$("#hide").prop('scrollHeight') + "px"}, 200);
+    } else {
+        $("#hide").animate({height:"0"}, 200);
+        setTimeout(function () {
+            $("#hide").css("display", "none")
+        }, 150);
+        $(target).text("收起");
+    }
+}
+
 // function escape_html() {
 //     var temp = document.createElement("div");
 //     (temp.textContent != null) ? (temp.textContent = get()) : (temp.innerText = get());
@@ -261,6 +275,26 @@ function copy_emojis() {
     } else {
         copyText(search_emojis_result);
     }
+}
+
+function translate1() {
+    let originalContent = get();
+    $.getJSON("https://api.66mz8.com/api/fanyi.php?info="+get(), function(json){
+        set(json.fanyi)
+        if (get() === originalContent) {
+            toast("无法翻译");
+        }
+    });
+}
+
+function randomSentence() {
+    let originalContent = get();
+    $.getJSON("https://v1.hitokoto.cn/", function(json){
+        set(json.hitokoto + "\n\n——" +json.from)
+        if (get() === originalContent) {
+            randomSentence();
+        }
+    });
 }
 
 function text_change() {
