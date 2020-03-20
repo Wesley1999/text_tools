@@ -27,16 +27,20 @@
         <button type="button" class="btn btn-secondary" onclick="refresh()">刷新</button>
         <button type="button" class="btn btn-secondary" onclick="clear_text()">清空</button>
     </div>
-    <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button type="button" class="btn btn-secondary" onclick="random_md5()">随机MD5</button>
-        <button type="button" class="btn btn-secondary" onclick="md5_encrypt()">MD5加密</button>
-        <button type="button" class="btn btn-secondary" onclick="md5_minus_click()" style="width: 38px" id="md5_minus">-</button>
-        <input type="text" class="form-control" style="width: 150px" placeholder="MD5 salt" id="md5_salt" onfocus="toast('盐值会拼接在待加密字符串之后')">
+
+    <div class="row" style="margin-left: 20px; margin-top: 10px; z-index: 0">
+        <input type="text" id="timer" class="form-control" style="margin-right: 10px; width:38px; background: url('img/clock.png') no-repeat; background-size: 38px; padding: 0; border: 0; color: rgba(0, 0 ,0 ,0); box-shadow: none" readonly>
+        <button type="button" class="btn btn-secondary" onclick="current_time_stamp()">当前时间戳</button>
+        <button type="button" class="btn btn-secondary" onclick="time_stamp_to_time()">时间戳转时间</button>
+        <button type="button" class="btn btn-secondary" onclick="time_to_time_stamp()">时间转时间戳</button>
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button type="button" class="btn btn-secondary" onclick="aes_encrypt()">AES加密</button>
-        <button type="button" class="btn btn-secondary" onclick="aes_decrypt()">AES解密</button>
-        <input type="text" class="form-control" style="width: 150px" placeholder="AES key" id="aes_key" onfocus="toast('此功能尚未实现')">
+        <div class="picker" style="height: 38px; width: 38px; background-color:#fff; margin-right: 10px">
+            <svg t="1583586112098" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2332" width="38px" height="38px"><path id="picker" d="M502.181647 29.635765a479.292235 479.292235 0 0 0-481.28 481.28 479.292235 479.292235 0 0 0 481.28 481.28c42.827294 0 80.233412-37.526588 80.233412-80.233412 0-21.443765-5.300706-37.586824-21.263059-53.609412-10.842353-16.082824-21.443765-32.105412-21.443765-53.36847 0-42.827294 37.406118-80.233412 80.293647-80.233412h96.256c149.744941 0 267.324235-117.699765 267.324236-267.444706-0.120471-235.158588-214.076235-427.670588-481.400471-427.670588m-294.068706 481.28c-42.827294 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.406118-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647-0.120471 42.706824-37.526588 80.233412-80.233412 80.233412M368.519529 296.96c-42.827294 0-80.293647-37.345882-80.293647-80.233412 0-42.706824 37.466353-80.233412 80.293647-80.233412 42.706824 0 80.233412 37.406118 80.233412 80.233412 0 42.827294-37.406118 80.233412-80.233412 80.233412m267.324236 0c-42.767059 0-80.233412-37.345882-80.233412-80.233412 0-42.706824 37.406118-80.233412 80.233412-80.233412 42.767059 0 80.293647 37.406118 80.293647 80.233412 0 42.827294-37.466353 80.233412-80.293647 80.233412m160.406588 213.955765c-42.767059 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.345882-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647 0 42.706824-37.406118 80.233412-80.233412 80.233412" fill="#000000" p-id="2333"></path></svg>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="copy_hex()">复制hex</button>
+        <button type="button" class="btn btn-secondary" onclick="copy_rgb()">复制rgb</button>
+        <input type="text" class="form-control" style="width: 150px" placeholder="font-size: 20px" id="font_size" oninput="font_size_change()" onfocus="toast('请输入12到100之间的数，单位：px')">
     </div>
     <div class="row" style="margin-left: 20px; margin-top: 10px">
         <button type="button" class="btn btn-secondary" onclick="escape_lt_gt()">转义<></button>
@@ -49,28 +53,25 @@
     </div>
 
     <div id="hide" style="display: none; height: 0">
-        <div class="row" style="margin-left: 20px; margin-top: 10px; z-index: 0">
-            <button type="button" class="btn btn-secondary" onclick="current_time_stamp()">当前时间戳</button>
-            <button type="button" class="btn btn-secondary" onclick="time_stamp_to_time()">时间戳转时间</button>
-            <button type="button" class="btn btn-secondary" onclick="time_to_time_stamp()">时间转时间戳</button>
-            <input type="text" id="timer" class="form-control" style="width:38px; background: url('img/clock.png') no-repeat; background-size: 38px; padding: 0; border: 0; color: rgba(0, 0 ,0 ,0); box-shadow: none" readonly>
+        <div class="row" style="margin-left: 20px; margin-top: 10px">
+            <button type="button" class="btn btn-secondary" onclick="random_md5()">随机MD5</button>
+            <button type="button" class="btn btn-secondary" onclick="md5_encrypt()">MD5加密</button>
+            <button type="button" class="btn btn-secondary" onclick="md5_minus_click()" style="width: 38px" id="md5_minus">-</button>
+            <input type="text" class="form-control" style="width: 150px" placeholder="MD5 salt" id="md5_salt" onfocus="toast('盐值会拼接在待加密字符串之后')">
         </div>
         <div class="row" style="margin-left: 20px; margin-top: 10px">
-            <button type="button" class="btn btn-secondary" onclick="copy_hex()">复制hex</button>
-            <button type="button" class="btn btn-secondary" onclick="copy_rgb()">复制rgb</button>
-            <input type="text" class="form-control" style="width: 150px" placeholder="font-size: 20px" id="font_size" oninput="font_size_change()" onfocus="toast('请输入12到100之间的数，单位：px')">
-            <div class="picker" style="height: 38px; width: 38px; background-color:#fff; margin-left: 10px">
-                <svg t="1583586112098" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2332" width="38px" height="38px"><path id="picker" d="M502.181647 29.635765a479.292235 479.292235 0 0 0-481.28 481.28 479.292235 479.292235 0 0 0 481.28 481.28c42.827294 0 80.233412-37.526588 80.233412-80.233412 0-21.443765-5.300706-37.586824-21.263059-53.609412-10.842353-16.082824-21.443765-32.105412-21.443765-53.36847 0-42.827294 37.406118-80.233412 80.293647-80.233412h96.256c149.744941 0 267.324235-117.699765 267.324236-267.444706-0.120471-235.158588-214.076235-427.670588-481.400471-427.670588m-294.068706 481.28c-42.827294 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.406118-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647-0.120471 42.706824-37.526588 80.233412-80.233412 80.233412M368.519529 296.96c-42.827294 0-80.293647-37.345882-80.293647-80.233412 0-42.706824 37.466353-80.233412 80.293647-80.233412 42.706824 0 80.233412 37.406118 80.233412 80.233412 0 42.827294-37.406118 80.233412-80.233412 80.233412m267.324236 0c-42.767059 0-80.233412-37.345882-80.233412-80.233412 0-42.706824 37.406118-80.233412 80.233412-80.233412 42.767059 0 80.293647 37.406118 80.293647 80.233412 0 42.827294-37.466353 80.233412-80.293647 80.233412m160.406588 213.955765c-42.767059 0-80.233412-37.526588-80.233412-80.233412 0-42.767059 37.345882-80.293647 80.233412-80.293647 42.827294 0 80.233412 37.466353 80.233412 80.293647 0 42.706824-37.406118 80.233412-80.233412 80.233412" fill="#000000" p-id="2333"></path></svg>
-            </div>
+            <button type="button" class="btn btn-secondary" onclick="aes_encrypt()">AES加密</button>
+            <button type="button" class="btn btn-secondary" onclick="aes_decrypt()">AES解密</button>
+            <input type="text" class="form-control" style="width: 150px" placeholder="AES key" id="aes_key" onfocus="toast('此功能尚未实现')">
         </div>
         <div class="row" style="margin-left: 20px; margin-top: 10px">
             <button type="button" class="btn btn-secondary" onclick="search_emojis()">搜索emoji</button>
             <button type="button" class="btn btn-secondary" onclick="copy_emojis()">复制emoji</button>
         </div>
         <div class="row" style="margin-left: 20px; margin-top: 10px">
-        <button type="button" class="btn btn-secondary" onclick="translate1()">中英互译</button>
-        <button type="button" class="btn btn-secondary" onclick="randomSentence()">随机的一句话</button>
-    </div>
+            <button type="button" class="btn btn-secondary" onclick="translate1()">中英互译</button>
+            <button type="button" class="btn btn-secondary" onclick="randomSentence()">随机的一句话</button>
+        </div>
     </div>
     
     <br>

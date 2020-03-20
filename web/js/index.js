@@ -8,7 +8,7 @@ $(function () {
             $("#text").css("color", hex);
             $("#picker").attr("fill", hex);
         }
-    })
+    });
 });
 
 function copy() {
